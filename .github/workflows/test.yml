@@ -1,0 +1,21 @@
+name: Check Docker User Environment Variables
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  check-env-vars:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set up the environment
+      run: |
+        echo "APARMAR_SANDBOX_DOCKER_USER=my_docker_user" >> $GITHUB_ENV
+        echo "MY_DOCKER_USER=my_other_docker_user" >> $GITHUB_ENV
+
+    - name: Check for Docker User Variables
+      run: |
+        for var in $(printenv | grep '_DOCKER_USER$' | cut -d '=' -f 1); do
+          echo "Found variable: $var with value: ${!var}"
+        done
